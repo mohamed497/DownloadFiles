@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Download Files</string>
+    <string name="work_permission">need Permission of Storage</string>
+</resources>
