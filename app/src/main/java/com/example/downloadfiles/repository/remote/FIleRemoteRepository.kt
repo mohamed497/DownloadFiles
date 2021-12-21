@@ -7,8 +7,8 @@ import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-class FIleRemoteRepository: FileRepository {
-    private val downloadService = FileRetrofitClient.retrofitService
+class FIleRemoteRepository(private val downloadService:FileRetrofitService): FileRepository {
+//    private val downloadService = FileRetrofitClient.retrofitService
 
     override fun insertFiles(files: List<FileInfo>): Completable {
         throw UnsupportedOperationException("You can not get insert files in Remote layer")

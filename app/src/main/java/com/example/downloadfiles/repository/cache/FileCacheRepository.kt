@@ -8,18 +8,18 @@ import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-class FileCacheRepository: FileRepository {
-    private val fileDao = FileDatabase.getInstance(App.instance).fileDao
+class FileCacheRepository(private val db: FileDatabase): FileRepository {
+//    private val fileDao = FileDatabase.getInstance(App.instance).fileDao
     override fun insertFiles(files: List<FileInfo>): Completable {
-        return fileDao.insertFiles(files)
+        return db.fileDao.insertFiles(files)
     }
 
     override fun insertFile(file: FileInfo): Completable {
-        return fileDao.insertFile(file)
+        return db.fileDao.insertFile(file)
     }
 
     override fun getSavedFiles(): Observable<List<FileInfo>> {
-        return fileDao.getSavedFiles()
+        return db.fileDao.getSavedFiles()
     }
 
     override fun getFiles(url: String): Observable<Response<ResponseBody>> {

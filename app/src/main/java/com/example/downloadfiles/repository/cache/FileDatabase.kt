@@ -11,23 +11,23 @@ import com.example.downloadfiles.models.FileInfo
 abstract class FileDatabase : RoomDatabase() {
     abstract val fileDao: FileDao
 
-    companion object {
-        @Volatile
-        private var INSTANCE: FileDatabase? = null
-        fun getInstance(context: Context): FileDatabase {
-            synchronized(this) {
-                var instance = INSTANCE
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        FileDatabase::class.java, Constants.DATABASE_NAME
-                    )
-                        .fallbackToDestructiveMigration()
-                        .build()
-                    INSTANCE = instance
-                }
-                return instance
-            }
-        }
-    }
+//    companion object {
+//        @Volatile
+//        private var INSTANCE: FileDatabase? = null
+//        fun getInstance(context: Context): FileDatabase {
+//            synchronized(this) {
+//                var instance = INSTANCE
+//                if (instance == null) {
+//                    instance = Room.databaseBuilder(
+//                        context.applicationContext,
+//                        FileDatabase::class.java, Constants.DATABASE_NAME
+//                    )
+//                        .fallbackToDestructiveMigration()
+//                        .build()
+//                    INSTANCE = instance
+//                }
+//                return instance
+//            }
+//        }
+//    }
 }

@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_download.*
 import android.content.Intent
 import android.os.Build
 import com.example.downloadfiles.service.DownloadFileService
+import org.koin.android.ext.android.inject
 
 
 class DownloadActivity : AppCompatActivity() {
@@ -24,19 +25,20 @@ class DownloadActivity : AppCompatActivity() {
     private lateinit var fileAdapter: FileAdapter
     private lateinit var fileViewModel: FileViewModel
     private lateinit var serviceIntent: Intent
-
+    val downloadService:DownloadFileService by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download)
-        initViewModel()
+//        initViewModel()
         setupRecyclerview()
+
     }
 
-    private fun initViewModel() {
-        fileViewModel =
-            ViewModelProvider(this)
-                .get(FileViewModel::class.java)
-    }
+//    private fun initViewModel() {
+//        fileViewModel =
+//            ViewModelProvider(this)
+//                .get(FileViewModel::class.java)
+//    }
 
     private fun setupRecyclerview() {
         with(recyclerView) {
@@ -56,7 +58,8 @@ class DownloadActivity : AppCompatActivity() {
                                 Intent(this@DownloadActivity, DownloadFileService::class.java)
                             serviceIntent.putExtra(Constants.FILE_URL_KEY, file.url)
                             serviceIntent.putExtra(Constants.FILE_NAME_KEY, file.title)
-                            startService(serviceIntent)
+                            downloadService.startService(serviceIntent)
+//                            startService(serviceIntent)
 
                         }
 

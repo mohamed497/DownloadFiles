@@ -29,12 +29,12 @@ import java.io.OutputStream
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class DownloadFileService: Service() {
+class DownloadFileService(private val fileRepo : FileRepositoryImpl): Service() {
 
 private lateinit var notificationManager: NotificationManager
 private lateinit var notificationBuilder: NotificationCompat.Builder
 
-    private val fileRepo = FileRepositoryImpl()
+//    private val fileRepo = FileRepositoryImpl()
 
     override fun onBind(p0: Intent?): IBinder?  = null
 
@@ -67,7 +67,7 @@ private lateinit var notificationBuilder: NotificationCompat.Builder
         if (Environment.MEDIA_MOUNTED != state) {
             return
         }
-        var totalFileSize: Int
+        val totalFileSize: Int
         var count: Int
         val data = ByteArray(ARRAY_SIZE)
         val fileSize = response?.contentLength()

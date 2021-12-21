@@ -17,8 +17,8 @@ import kotlin.math.roundToInt
 
 const val ARRAY_SIZE = 1024
 
-class FileViewModel : ViewModel() {
-    private val fileRepo = FileRepositoryImpl()
+class FileViewModel(private val fileRepo : FileRepositoryImpl) : ViewModel() {
+//    private val fileRepo = FileRepositoryImpl()
     fun downloadFile(url: String) {
         fileRepo.getFiles(url).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

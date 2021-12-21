@@ -10,21 +10,24 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-class FileRepositoryImpl: FileRepository {
+class FileRepositoryImpl(
+    private val cacheRepo: FileCacheRepository,
+    private val remoteRepo: FIleRemoteRepository
+) : FileRepository {
 
-    private val cacheRepo: FileRepository = FileCacheRepository()
-    private val remoteRepo: FileRepository = FIleRemoteRepository()
+//    private val cacheRepo: FileRepository = FileCacheRepository()
+//    private val remoteRepo: FileRepository = FIleRemoteRepository()
 
     override fun insertFiles(files: List<FileInfo>): Completable {
-        TODO("Not yet implemented")
+        return cacheRepo.insertFiles(files)
     }
 
     override fun insertFile(file: FileInfo): Completable {
-        TODO("Not yet implemented")
+        return cacheRepo.insertFile(file)
     }
 
     override fun getSavedFiles(): Observable<List<FileInfo>> {
-        TODO("Not yet implemented")
+        return cacheRepo.getSavedFiles()
     }
 
     override fun getFiles(url: String): Observable<Response<ResponseBody>> {
