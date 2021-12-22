@@ -34,31 +34,6 @@ android {
 }
 
 dependencies {
-//    implementation "androidx.core:core-ktx:$version_core"
-//    implementation "androidx.appcompat:appcompat:$version_appcompat"
-//    implementation "com.google.android.material:material:$version_material"
-//    implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
-//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-//    testImplementation "junit:junit:$version_junit"
-//    androidTestImplementation "androidx.test.ext:junit:$version_junit"
-//    androidTestImplementation "androidx.test.espresso:espresso-core:$version_espresso_core"
-//
-//    implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
-//    implementation "com.squareup.retrofit2:adapter-rxjava3:$version_retrofit"
-//    implementation "com.squareup.retrofit2:converter-gson:$version_retrofit"
-//
-//    implementation "io.reactivex.rxjava3:rxandroid:$version_rxjava"
-//    implementation "io.reactivex.rxjava3:rxjava:$version_rxjava"
-//    implementation "io.reactivex.rxjava3:rxkotlin:$version_rxjava"
-//
-//    implementation "androidx.room:room-runtime:$version_room"
-//    annotationProcessor "androidx.room:room-compiler:$version_room"
-//    kapt "androidx.room:room-compiler:$version_room"
-//
-//    implementation "androidx.room:room-rxjava3:$version_room"
-//    implementation "androidx.cardview:cardview:$version_cardview"
-
-
     implementation supportDependencies.coreKtx
     implementation supportDependencies.junit
     implementation supportDependencies.material

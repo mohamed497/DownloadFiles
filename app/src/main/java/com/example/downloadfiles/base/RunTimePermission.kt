@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 
 class RunTimePermission(private var context: Context) {
 
-    lateinit var permissionCallback: PermissionCallback
+    private lateinit var permissionCallback: PermissionCallback
 
     interface PermissionCallback {
 
@@ -17,11 +17,11 @@ class RunTimePermission(private var context: Context) {
         fun onDenied()
     }
 
-    fun requestPermission(arrPermisionName: List<String>, permissionCallback: PermissionCallback) {
+    fun requestPermission(arrPermissionName: List<String>, permissionCallback: PermissionCallback) {
         this.permissionCallback = permissionCallback
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!checkAllPermisionGranted(arrPermisionName)) {
-                (context as Activity).requestPermissions(arrPermisionName.toTypedArray(), Constants.PERMISSION_REQUEST)
+            if (!checkAllPermisionGranted(arrPermissionName)) {
+                (context as Activity).requestPermissions(arrPermissionName.toTypedArray(), Constants.PERMISSION_REQUEST)
             } else {
                 permissionCallback.onGranted()
             }
