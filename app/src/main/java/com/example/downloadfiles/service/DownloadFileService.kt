@@ -1,5 +1,6 @@
 package com.example.downloadfiles.service
 
+import android.R.attr
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -23,6 +24,9 @@ import okhttp3.ResponseBody
 import org.koin.android.ext.android.inject
 import java.io.BufferedInputStream
 import java.io.FileOutputStream
+import io.reactivex.rxjava3.subjects.PublishSubject
+import android.R.attr.data
+import com.example.downloadfiles.models.DownloadingFileStatus
 
 
 class DownloadFileService : Service() {
@@ -30,7 +34,6 @@ class DownloadFileService : Service() {
     private val fileRepo by inject<FileRepositoryImpl>()
     private lateinit var notificationManager: NotificationManager
     private lateinit var notificationBuilder: NotificationCompat.Builder
-
 
     override fun onBind(p0: Intent?): IBinder? = null
 
@@ -42,9 +45,9 @@ class DownloadFileService : Service() {
 
         setupNotification()
         observeOnDownloadingFile(url, name)
-        Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.downloading), Toast.LENGTH_SHORT).show()
 
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     private fun observeOnDownloadingFile(url: String?, name: String?) {
@@ -53,14 +56,20 @@ class DownloadFileService : Service() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = { response ->
-                saveFile(response.body(), name ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME)
+                saveFile(
+                    response.body(),
+                    name ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME
+                )
                 stopSelf()
             },
                 onError = { throwable ->
                     error("error in downloading file", throwable)
                 },
                 onComplete = {
-                    displayNotification(DownloadServiceConstants.PROGRESS_MAX, name ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME)
+                    displayNotification(
+                        DownloadServiceConstants.PROGRESS_MAX,
+                        name ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME
+                    )
                     debug("Download Completed")
                 })
 
@@ -70,7 +79,10 @@ class DownloadFileService : Service() {
         notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder =
-            NotificationCompat.Builder(applicationContext, DownloadServiceConstants.NOTIFICATION_CHANNEL)
+            NotificationCompat.Builder(
+                applicationContext,
+                DownloadServiceConstants.NOTIFICATION_CHANNEL
+            )
     }
 
     private fun saveFile(response: ResponseBody?, name: String) {
@@ -81,12 +93,15 @@ class DownloadFileService : Service() {
         val data = ByteArray(DownloadServiceConstants.ARRAY_SIZE)
         val fileSize = response?.contentLength()
         val input = BufferedInputStream(response?.byteStream(), DownloadServiceConstants.INPUT_SIZE)
-        val output = FileOutputStream("${DownloadServiceConstants.STORAGE}${name}${System.currentTimeMillis()}.mp4")
+        val output =
+            FileOutputStream("${DownloadServiceConstants.STORAGE}${name}${System.currentTimeMillis()}.mp4")
         var total = 0
 
         while (input.read(data).also { count = it } != -1) {
             total += count
             val progress = ((total * 100) / (fileSize ?: 1L)).toInt()
+            //
+            DownloadingFileStatus.progressFile.onNext(progress)
             displayNotification(progress = progress, name = name)
             output.write(data, 0, count)
         }
@@ -95,6 +110,7 @@ class DownloadFileService : Service() {
         input.close()
 
     }
+
 
     private fun checkExternalStorageState() {
         val state = Environment.getExternalStorageState()
@@ -121,9 +137,9 @@ class DownloadFileService : Service() {
         remoteView.setImageViewResource(R.id.iv_notif, R.drawable.ic_insert_drive_file_black_24dp)
         remoteView.setTextViewText(
             R.id.tv_notif_progress,
-            "$progress complete)"
+            "$progress ${getString(R.string.complete)})"
         )
-        remoteView.setTextViewText(R.id.tv_notif_title, "Downloading $name")
+        remoteView.setTextViewText(R.id.tv_notif_title, "${getString(R.string.downloading)} $name")
         remoteView.setProgressBar(
             R.id.pb_notif,
             DownloadServiceConstants.PROGRESS_MAX,
@@ -133,6 +149,9 @@ class DownloadFileService : Service() {
         notificationBuilder
             .setContent(remoteView)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-        notificationManager.notify(DownloadServiceConstants.NOTIFICATION_ID, notificationBuilder.build())
+        notificationManager.notify(
+            DownloadServiceConstants.NOTIFICATION_ID,
+            notificationBuilder.build()
+        )
     }
 }

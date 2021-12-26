@@ -5,5 +5,8 @@ data class FileInfo(
     val title: String,
     val url: String,
     val filePath: String,
-    val downloadStatus: DownloadStatus
+    val downloadStatus: DownloadStatus,
+    var progress: Int? = 0
 )
+
+

@@ -13,8 +13,8 @@ class RunTimePermission(private var context: Context) {
 
     interface PermissionCallback {
 
-        fun onGranted()
-        fun onDenied()
+        fun onGranted(requestCode: Int)
+        fun onDenied(requestCode: Int)
     }
 
     fun requestPermission(arrPermissionName: List<String>, permissionCallback: PermissionCallback) {
@@ -23,10 +23,10 @@ class RunTimePermission(private var context: Context) {
             if (!checkAllPermisionGranted(arrPermissionName)) {
                 (context as Activity).requestPermissions(arrPermissionName.toTypedArray(), Constants.PERMISSION_REQUEST)
             } else {
-                permissionCallback.onGranted()
+                permissionCallback.onGranted(Constants.PERMISSION_REQUEST)
             }
         } else {
-            permissionCallback.onGranted()
+            permissionCallback.onGranted(Constants.PERMISSION_REQUEST)
         }
     }
 
@@ -39,13 +39,13 @@ class RunTimePermission(private var context: Context) {
         return true
     }
 
-    fun onRequestPermissionsResult(grantResults: IntArray) {
+    fun onRequestPermissionsResult(requestCode: Int,grantResults: IntArray) {
         for (i in grantResults.indices) {
             if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                permissionCallback.onGranted()
+                permissionCallback.onGranted(requestCode)
 
             } else {
-                permissionCallback.onDenied()
+                permissionCallback.onDenied(requestCode)
                 break
             }
         }

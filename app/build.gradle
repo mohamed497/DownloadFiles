@@ -64,5 +64,5 @@ dependencies {
     implementation supportDependencies.cardview
     implementation supportDependencies.glide
     implementation supportDependencies.glideCompiler
-
+    implementation supportDependencies.kotlinStdlib
 }
