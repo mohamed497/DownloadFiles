@@ -74,17 +74,21 @@ class DownloadActivity : AppCompatActivity() {
         runtimePermission.requestPermission(listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
             object : RunTimePermission.PermissionCallback {
                 override fun onGranted(requestCode: Int) {
-                    val serviceIntent =
-                        Intent(this@DownloadActivity, DownloadFileService::class.java)
-                    serviceIntent.putExtra(Constants.FILE_URL_KEY, file.url)
-                    serviceIntent.putExtra(Constants.FILE_NAME_KEY, file.title)
-                    startService(serviceIntent)
+                    startService(file)
                 }
 
                 override fun onDenied(requestCode: Int) {
                     setupToast(getString(R.string.work_permission))
                 }
             })
+    }
+
+    private fun startService(file: FileInfo) {
+        val serviceIntent =
+            Intent(this@DownloadActivity, DownloadFileService::class.java)
+        serviceIntent.putExtra(Constants.FILE_URL_KEY, file.url)
+        serviceIntent.putExtra(Constants.FILE_NAME_KEY, file.title)
+        startService(serviceIntent)
     }
 
     private fun isPermissionGranted(): Boolean =
