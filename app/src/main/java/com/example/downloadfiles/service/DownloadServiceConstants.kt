@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 
 object DownloadServiceConstants{
     const val NOTIFICATION_ID = 500
-
     @SuppressLint("SdCardPath")
     const val STORAGE = "/sdcard/"
     const val INPUT_SIZE = 1024 * 8

@@ -1,6 +1,5 @@
 package com.example.downloadfiles.service
 
-import android.R.attr
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -24,10 +23,14 @@ import okhttp3.ResponseBody
 import org.koin.android.ext.android.inject
 import java.io.BufferedInputStream
 import java.io.FileOutputStream
-import io.reactivex.rxjava3.subjects.PublishSubject
-import android.R.attr.data
+import com.example.downloadfiles.models.DownloadStatus
 import com.example.downloadfiles.models.DownloadingFileStatus
+import com.example.downloadfiles.models.FileInfo
+import android.os.SystemClock
 
+import android.app.AlarmManager
+
+import android.app.PendingIntent
 
 class DownloadFileService : Service() {
 
@@ -40,37 +43,36 @@ class DownloadFileService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
-        val url = intent?.getStringExtra(Constants.FILE_URL_KEY)
-        val name = intent?.getStringExtra(Constants.FILE_NAME_KEY)
-
+        val file = intent?.getParcelableExtra<FileInfo>(Constants.FILE_KEY)
         setupNotification()
-        observeOnDownloadingFile(url, name)
+        observeOnDownloadingFile(file)
         Toast.makeText(this, getString(R.string.downloading), Toast.LENGTH_SHORT).show()
 
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
-    private fun observeOnDownloadingFile(url: String?, name: String?) {
+    private fun observeOnDownloadingFile(file: FileInfo?) {
 
-        fileRepo.getFiles(url ?: "")
+        fileRepo.getFiles(file?.url ?: "")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = { response ->
                 saveFile(
                     response.body(),
-                    name ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME
+                    file
                 )
                 stopSelf()
             },
                 onError = { throwable ->
-                    error("error in downloading file", throwable)
+                    error(getString(R.string.error), throwable)
                 },
                 onComplete = {
+                    file?.downloadStatus = DownloadStatus.DOWNLOADED
                     displayNotification(
                         DownloadServiceConstants.PROGRESS_MAX,
-                        name ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME
+                        file?.title ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME
                     )
-                    debug("Download Completed")
+                    debug(getString(R.string.download_completed))
                 })
 
     }
@@ -85,24 +87,29 @@ class DownloadFileService : Service() {
             )
     }
 
-    private fun saveFile(response: ResponseBody?, name: String) {
+    private fun saveFile(response: ResponseBody?, file: FileInfo?) {
         createNotificationChannel()
-        displayNotification(progress = DownloadServiceConstants.PROGRESS_INIT, name = name)
+        displayNotification(
+            progress = DownloadServiceConstants.PROGRESS_INIT,
+            name = file?.title ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME
+        )
         checkExternalStorageState()
         var count: Int
         val data = ByteArray(DownloadServiceConstants.ARRAY_SIZE)
         val fileSize = response?.contentLength()
         val input = BufferedInputStream(response?.byteStream(), DownloadServiceConstants.INPUT_SIZE)
         val output =
-            FileOutputStream("${DownloadServiceConstants.STORAGE}${name}${System.currentTimeMillis()}.mp4")
+            FileOutputStream("${DownloadServiceConstants.STORAGE}${file?.title}${System.currentTimeMillis()}.mp4")
         var total = 0
 
         while (input.read(data).also { count = it } != -1) {
             total += count
             val progress = ((total * 100) / (fileSize ?: 1L)).toInt()
-            //
-            DownloadingFileStatus.progressFile.onNext(progress)
-            displayNotification(progress = progress, name = name)
+            DownloadingFileStatus.emitNewProgressUpdates(progress, file)
+            displayNotification(
+                progress = progress,
+                name = file?.title ?: DownloadServiceConstants.DEFAULT_DOWNLOAD_NAME
+            )
             output.write(data, 0, count)
         }
         output.flush()
@@ -110,7 +117,6 @@ class DownloadFileService : Service() {
         input.close()
 
     }
-
 
     private fun checkExternalStorageState() {
         val state = Environment.getExternalStorageState()
@@ -154,4 +160,6 @@ class DownloadFileService : Service() {
             notificationBuilder.build()
         )
     }
+
+
 }

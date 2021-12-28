@@ -22,13 +22,6 @@ object Data {
         ),
         FileInfo(
             3,
-            "film",
-            "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4",
-            "path",
-            DownloadStatus.NOT_DOWNLOADED
-        ),
-        FileInfo(
-            4,
             "movie",
             "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
             "path",

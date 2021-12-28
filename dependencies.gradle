@@ -11,7 +11,7 @@ ext {
             junit            : '4.+',
             cardview         : '1.0.0',
             koin             : '2.0.1',
-            kotlinStdlib: '1.5.31',
+            kotlinStdlib     : '1.5.31',
             androidx         : [
                     coreKtx         : '1.7.0',
                     appCompat       : '1.3.1',
@@ -28,30 +28,24 @@ ext {
             constraintLayout : "androidx.constraintlayout:constraintlayout:${libVersions.androidx.constraintLayout}",
             testJunit        : "androidx.test.ext:junit:${libVersions.androidx.testJunit}",
             espressoCore     : "androidx.test.espresso:espresso-core:${libVersions.androidx.espressoCore}",
-
             roomRuntime      : "androidx.room:room-runtime:${libVersions.room}",
             roomCompiler     : "androidx.room:room-compiler:${libVersions.room}",
             roomKapt         : "androidx.room:room-compiler:${libVersions.room}",
             roomKtx          : "androidx.room:room-rxjava3:${libVersions.room}",
-
             retrofit         : "com.squareup.retrofit2:retrofit:${libVersions.retrofit}",
             retrofitAdapter  : "com.squareup.retrofit2:adapter-rxjava3:${libVersions.retrofit}",
             retrofitConverter: "com.squareup.retrofit2:converter-gson:${libVersions.retrofit}",
-
             rxjavaAndroid    : "io.reactivex.rxjava3:rxandroid:${libVersions.rxjava}",
             rxjava           : "io.reactivex.rxjava3:rxjava:${libVersions.rxjava}",
             rxKotlin         : "io.reactivex.rxjava3:rxkotlin:${libVersions.rxjava}",
-
-
             koinAndroid      : "io.insert-koin:koin-android:${libVersions.koin}",
             koinScope        : "io.insert-koin:koin-android-scope:${libVersions.koin}",
             koinViewmodel    : "io.insert-koin:koin-android-viewmodel:${libVersions.koin}",
             koinExt          : "io.insert-koin:koin-android-ext:${libVersions.koin}",
-
             cardview         : "androidx.cardview:cardview:${libVersions.cardview}",
             glide            : "com.github.bumptech.glide:glide:${libVersions.glide}",
             glideCompiler    : "com.github.bumptech.glide:compiler:${libVersions.glide}",
-            kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib:${libVersions.kotlinStdlib}",
+            kotlinStdlib     : "org.jetbrains.kotlin:kotlin-stdlib:${libVersions.kotlinStdlib}",
 
     ]
 }

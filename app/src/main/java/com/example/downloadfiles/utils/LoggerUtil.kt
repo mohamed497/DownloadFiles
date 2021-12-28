@@ -1,6 +1,7 @@
 package com.example.downloadfiles.utils
 
 import android.util.Log
+import android.view.View
 
 
 fun Any.debug(message: Any) {
@@ -10,3 +11,5 @@ fun Any.debug(message: Any) {
 fun Any.error(message: String, throwable: Throwable?) {
     Log.e(this::class.java.simpleName, message, throwable)
 }
+
+

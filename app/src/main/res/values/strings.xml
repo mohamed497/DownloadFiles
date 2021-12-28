@@ -3,4 +3,6 @@
     <string name="work_permission">need Permission of Storage</string>
     <string name="downloading">Downloading</string>
     <string name="complete">Complete</string>
+    <string name="download_completed">Download Completed</string>
+    <string name="error">error in downloading file</string>
 </resources>

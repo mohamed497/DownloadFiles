@@ -42,25 +42,20 @@ dependencies {
     testImplementation supportDependencies.junit
     androidTestImplementation supportDependencies.testJunit
     androidTestImplementation supportDependencies.espressoCore
-
     implementation supportDependencies.roomRuntime
     annotationProcessor supportDependencies.roomCompiler
     kapt supportDependencies.roomKapt
     implementation supportDependencies.roomKtx
-
     implementation supportDependencies.koinAndroid
     implementation supportDependencies.koinScope
     implementation supportDependencies.koinViewmodel
     implementation supportDependencies.koinExt
-
     implementation supportDependencies.retrofit
     implementation supportDependencies.retrofitAdapter
     implementation supportDependencies.retrofitConverter
-
     implementation supportDependencies.rxjavaAndroid
     implementation supportDependencies.rxjava
     implementation supportDependencies.rxKotlin
-
     implementation supportDependencies.cardview
     implementation supportDependencies.glide
     implementation supportDependencies.glideCompiler
